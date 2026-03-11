@@ -50,6 +50,7 @@ export interface ProfileData {
   socials: {
     linkedin?: string;
     github?: string;
+    peerlist?: string;
     //twitter?: string;
   };
   skills: Skill[];

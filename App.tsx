@@ -16,7 +16,26 @@ import {
 } from 'lucide-react';
 import { profileData } from './data';
 // import ChatBot from './components/ChatBot';
+
+// Custom Peerlist icon 
+const PeerlistIcon: React.FC<{ size?: number; className?: string }> = ({ size = 24, className }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    className={className}
+  >
+    <path d="M8.4 3H15.6C17.8402 3 18.9603 3 19.816 3.43597C20.5686 3.81947 21.1805 4.43139 21.564 5.18404C22 6.03969 22 7.15979 22 9.4V9.4C22 11.6402 22 12.7603 21.564 13.616C21.1805 14.3686 20.5686 14.9805 19.816 15.364C18.9603 15.8 17.8402 15.8 15.6 15.8H13.2V21H8.4V3Z" />
+    <path d="M13.2 15.8V10.6H15.6C16.1523 10.6 16.6 10.1523 16.6 9.6V9.4C16.6 8.84772 16.1523 8.4 15.6 8.4H13.2V3" fill="none" stroke="currentColor" strokeWidth="0" />
+    <rect x="8.4" y="3" width="4.8" height="18" fill="currentColor" />
+    <path d="M13.2 3H15.6C17.8402 3 18.9603 3 19.816 3.43597C20.5686 3.81947 21.1805 4.43139 21.564 5.18404C22 6.03969 22 7.15979 22 9.4C22 11.6402 22 12.7603 21.564 13.616C21.1805 14.3686 20.5686 14.9805 19.816 15.364C18.9603 15.8 17.8402 15.8 15.6 15.8H13.2V3Z" />
+  </svg>
+);
+
 import ContactForm from './components/ContactForm';
+import PhotographyPage from './components/PhotographyPage';
 
 const App: React.FC = () => {
   const containerRef = useRef(null);
@@ -27,10 +46,36 @@ const App: React.FC = () => {
   const [expandedExp, setExpandedExp] = useState<string | null>(null);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [currentHash, setCurrentHash] = useState(window.location.hash);
+
+  useEffect(() => {
+    const handleHashChange = () => setCurrentHash(window.location.hash);
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
 
   // Smooth scroll handler with offset for the fixed header
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
+    setActiveSection(id);
+
+    if (currentHash === '#/photography') {
+      window.location.hash = '';
+      setCurrentHash('');
+      setTimeout(() => {
+        const element = document.getElementById(id);
+        if (element) {
+          const offset = 80;
+          const bodyRect = document.body.getBoundingClientRect().top;
+          const elementRect = element.getBoundingClientRect().top;
+          const elementPosition = elementRect - bodyRect;
+          const offsetPosition = elementPosition - offset;
+          window.scrollTo({ top: offsetPosition, behavior: 'instant' });
+        }
+      }, 50);
+      return;
+    }
+
     const element = document.getElementById(id);
     if (element) {
       const offset = 80; // Account for header height
@@ -123,16 +168,27 @@ const App: React.FC = () => {
           <a
             href="#about"
             onClick={(e) => handleNavClick(e, 'about')}
-            className={`transition-all duration-300 ${activeSection === 'about' ? 'text-white border-b border-white' : 'text-white/40 hover:text-white'}`}
+            className={`transition-all duration-300 ${activeSection === 'about' && currentHash !== '#/photography' ? 'text-white border-b border-white' : 'text-white/40 hover:text-white'}`}
           >
             About
           </a>
           <a
             href="#work"
             onClick={(e) => handleNavClick(e, 'work')}
-            className={`transition-all duration-300 ${activeSection === 'work' ? 'text-white border-b border-white' : 'text-white/40 hover:text-white'}`}
+            className={`transition-all duration-300 ${activeSection === 'work' && currentHash !== '#/photography' ? 'text-white border-b border-white' : 'text-white/40 hover:text-white'}`}
           >
             Work
+          </a>
+          <a
+            href="#/photography"
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.hash = '#/photography';
+              setCurrentHash('#/photography');
+            }}
+            className={`transition-all duration-300 ${currentHash === '#/photography' ? 'text-white border-b border-white' : 'text-white/40 hover:text-white'}`}
+          >
+            Photography
           </a>
         </nav>
 
@@ -182,6 +238,18 @@ const App: React.FC = () => {
               </a>
             ))}
             <a
+              href="#/photography"
+              onClick={(e) => {
+                e.preventDefault();
+                setMobileMenuOpen(false);
+                window.location.hash = '#/photography';
+                setCurrentHash('#/photography');
+              }}
+              className="heading-font text-4xl font-bold uppercase tracking-tight text-white/80 hover:text-white transition-colors"
+            >
+              PHOTOGRAPHY
+            </a>
+            <a
               href="images/Purushothamreddy_Tiyyagura.pdf"
               download="Purushotham_Resume.pdf"
               className="mt-4 inline-flex items-center gap-2 px-5 py-3 bg-white text-black font-medium rounded-full"
@@ -193,6 +261,12 @@ const App: React.FC = () => {
         )}
       </AnimatePresence>
 
+      {currentHash === '#/photography' ? (
+        <PhotographyPage onBack={() => {
+          window.location.hash = '';
+          setCurrentHash('');
+        }} />
+      ) : (
       <main>
         {/* Ultra-Minimal Hero */}
         <section id="about" className="min-h-screen flex flex-col justify-center px-4 md:px-12 pt-24 md:pt-32 pb-8 md:pb-12 relative">
@@ -876,6 +950,16 @@ const App: React.FC = () => {
                     >
                       <Linkedin size={22} className="text-white group-hover:text-black transition-colors" />
                     </a>
+                    {profileData.socials.peerlist && (
+                      <a
+                        href={profileData.socials.peerlist}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group w-14 h-14 rounded-full border border-white/10 flex items-center justify-center hover:border-white/30 hover:bg-white transition-all duration-300"
+                      >
+                        <PeerlistIcon size={22} className="text-white group-hover:text-black transition-colors" />
+                      </a>
+                    )}
                   </div>
                 </div>
               </div>
@@ -889,6 +973,7 @@ const App: React.FC = () => {
           </div>
         </section>
       </main>
+      )}
 
       <footer className="bg-zinc-900 py-8 md:py-12 px-4 md:px-12 border-t border-white/5">
         <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
@@ -904,6 +989,11 @@ const App: React.FC = () => {
             <a href={profileData.socials.linkedin} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white transition-colors">
               <Linkedin size={18} />
             </a>
+            {profileData.socials.peerlist && (
+              <a href={profileData.socials.peerlist} target="_blank" rel="noopener noreferrer" className="text-white/40 hover:text-white transition-colors">
+                <PeerlistIcon size={18} />
+              </a>
+            )}
             <a href={`mailto:${profileData.email}`} className="text-white/40 hover:text-white transition-colors">
               <Mail size={18} />
             </a>

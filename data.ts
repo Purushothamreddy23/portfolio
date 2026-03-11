@@ -9,6 +9,7 @@ export const profileData: ProfileData = {
   socials: {
     linkedin: "https://www.linkedin.com/in/purushothamreddytiyyagura/",
     github: "https://github.com/Purushothamreddy23",
+    peerlist: "https://peerlist.io/purushotham23",
     //twitter: "https://twitter.com"
   },
   skills: [
