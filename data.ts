@@ -86,8 +86,8 @@ export const profileData: ProfileData = {
       description: "Menstrual health platform for women offering cycle tracking, virtual consultations with doctors, and pharmacy access",
       imageUrl: "images/hernest.png",
       tags: ["React", "Typescript", "Node.js", "PostgreSQL"],
-      link: "https://example.com/project1",
-      github: "https://github.com/alexsterling/ai-canvas"
+      link: "https://github.com/Purushothamreddy23/HERNEST",
+      github: "https://github.com/Purushothamreddy23/HERNEST"
     },
     {
       id: "p2",
@@ -95,8 +95,8 @@ export const profileData: ProfileData = {
       description: "AI-based legal assistant platform for lawyers, law firms, and the general public using fine-tuned LLMs and RAG, with features for legal document retrieval, analysis, chatbot assistance",
       imageUrl: "images/llm4law.png",
       tags: ["Python", "Machine-Learning", "RAG"],
-      link: "https://example.com/project2",
-      github: "https://github.com/alexsterling/quantum-analytics"
+      link: "https://github.com/Purushothamreddy23/LLM4LAW",
+      github: "https://github.com/Purushothamreddy23/LLM4LAW"
     },
 
   ],
@@ -109,15 +109,6 @@ export const profileData: ProfileData = {
       date: "2024",
       imageUrl: "images/aws.png",
       link: "https://cp.certmetrics.com/amazon/en/public/verify/credential/919ead960ed041ddba8049e3d36e840d",
-
-    },
-    {
-      id: "c2",
-      title: "Salesforce Certified AI Associate",
-      issuer: "Frontend Masters",
-      date: "2022",
-      imageUrl: "images/sales.png",
-      link: "https://www.salesforce.com/trailblazer/umfhamtlp6e1f75fcc",
 
     }
   ]
